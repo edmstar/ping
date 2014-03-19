@@ -7,7 +7,7 @@
 	include_once('classes/Users.php');
 	
 	/*
-	$database = Database::getDatabase('localhost', 'root', 'eduardoms', 'ping');
+	$database = Database::getDatabase('localhost', 'root', 'password', 'ping');
 	$database->connect();
 
 	$user = Users::load(1);
