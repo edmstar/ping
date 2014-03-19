@@ -16,19 +16,24 @@
 	}
 
 	// This class manages the connection to the MySQL database
+	// This is a singleton class, so the object should be invoked
+	// using the method getDatabase()
 	class Database
 	{
 
-		private $localDatabase = null;
+		
 		private $db_name = null;
 		private $db_server = null;
 		private $db_user = null;
 		private $db_password = null;
 
+		private $localDatabase = null;
+		private static $databaseInstance = null; // prevents
+
 		// constructs the class and saves the values for the local variables
 		// this values are gonna be used in the mysql connection
 		// created by a PDO object
-		public function __construct($server, $user, $password, $name)
+		private function __construct($server, $user, $password, $name)
 		{
 
 			if ($server == null || $user == null || $password == null || $name == null)
@@ -40,12 +45,32 @@
 			$this->db_password = $password;
 		}
 
+
+		// prevents the user to create more than one connection
+		// also allows the subclasses to access the static method
+		public static function getDatabase($server, $user, $password, $name)
+		{
+			if (!isset(Database::$databaseInstance))
+				Database::$databaseInstance = new Database($server, $user, $password, $name);
+
+			return Database::$databaseInstance;
+
+		}
+
+		public static function getDatabaseInstance()
+		{
+			if (!isset(Database::$databaseInstance))
+				throw new DatabaseException("The database has not been loaded");
+
+			return Database::$databaseInstance;
+		}
+
 		// tries to connect to the database
 		// saves a null value in the $localDatabase variable
 		// if the connection is not initialized
 		public function connect()
 		{
-			var $dsn = "mysql:dbname=".$this->db_name.";host=".$this->db_server;
+			$dsn = "mysql:dbname=".$this->db_name.";host=".$this->db_server;
 
 			try
 			{
@@ -61,6 +86,9 @@
 		// returns the local database instance (PDO Object)
 		public function getPDOInstance()
 		{
+			if (!isset($this->localDatabase))
+				throw new DatabaseException("The database has not been loaded!");
+
 			return $this->localDatabase;
 		}
 

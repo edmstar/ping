@@ -1,3 +1,13 @@
+<?php
+    
+    define('IN_INDEX', 1);
+    //shows erros
+    ini_set('display_errors', 'on');
+
+    //includes the basic configuration
+    include('includes/config.php');
+
+?>
 
 <!DOCTYPE html>
 <html lang="en">

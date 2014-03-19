@@ -156,6 +156,7 @@
 			return $sql;
 
 		}
+	}
 
 // this should no be here. to be moved
 /*		function Redirect($url, $tempo)	{
