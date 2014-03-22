@@ -1,117 +1,111 @@
 <?php
 
-	include_once('Database.php');
+include_once('Database.php');
 
-	class CachedTableException extends Exception
-	{
-	    public function __construct($message, $code = 0, Exception $previous = null)
-	    {
-	        parent::__construct($message, $code, $previous);
-	    }
+class CachedTableException extends Exception {
 
-	    public function __toString()
-	    {
-	        return __CLASS__ . ": [{$this->code}]: {$this->message}\n";
-	    }
-	}
+    public function __construct($message, $code = 0, Exception $previous = null) {
+        parent::__construct($message, $code, $previous);
+    }
 
-	abstract class CachedTable extends Database
-	{
-		protected static $objectList; // must be an array
-		protected $id;
-		protected $isLoaded;
+    public function __toString() {
+        return __CLASS__ . ": [{$this->code}]: {$this->message}\n";
+    }
 
-		protected abstract static function loadVariables($parametersArray);
+}
 
-		private final static function isCachedTableObject(&$object)
-		{
-			return ($object instanceOf CachedTable);
-		}
+abstract class CachedTable extends Database {
 
-		protected final static function addObject(&$objectList, &$object)
-		{
-			if (!self::isCachedTableObject($object))
-				throw new CachedTableException("The object provided must be a subclass of CachedTable!");
+    protected static $objectList; // must be an array
+    protected $id;
+    protected $isLoaded;
 
-			if (!self::hasObject($objectList, $object))
-			{
-				if ($object->isLoaded())
-					$objectList[$object->getId()] = &$object;
-			}
+    protected abstract static function loadVariables($parametersArray);
 
-		}
+    private final static function isCachedTableObject(&$object) {
+        return ($object instanceOf CachedTable);
+    }
 
-		protected final function hasObject(&$objectList, &$object)
-		{
-			if (!self::isCachedTableObject($object))
-				throw new CachedTableException("The object provided must be a subclass of CachedTable!");
+    protected final static function addObject(&$objectList, &$object) {
+        if (!self::isCachedTableObject($object)) {
+            throw new CachedTableException("The object provided must be a subclass of CachedTable!");
+        }
 
-			foreach($objectList as $item)
-			{
-				if ($item->getId() == $object->getId())
-					return true;
-			}
+        if (!self::hasObject($objectList, $object)) {
+            if ($object->isLoaded()) {
+                $objectList[$object->getId()] = &$object;
+            }
+        }
+    }
 
-			return false;
-		}
+    protected final function hasObject(&$objectList, &$object) {
+        if (!self::isCachedTableObject($object)) {
+            throw new CachedTableException("The object provided must be a subclass of CachedTable!");
+        }
 
-		protected final static function &getObject(&$objectList, $id)
-		{
-			foreach($objectList as $item)
-			{
-				if ($item->getId() == $id)
-					return $item;
-			}
+        foreach ($objectList as $item) {
+            if ($item->getId() == $object->getId()) {
+                return true;
+            }
+        }
 
-			$null = null;
-			return $null;
-		}
+        return false;
+    }
 
-		protected final static function removeObject(&$objectList, $id)
-		{
-			foreach($objectList as $item)
-			{
-				if ($item->getId() == $id)
-					unset($object->objectList[$item->getId()]);
-			}
-		}
+    protected final static function &getObject(&$objectList, $id) {
+        foreach ($objectList as $item) {
+            if ($item->getId() == $id) {
+                return $item;
+            }
+        }
 
-		protected static function load(&$objectList, $table, $id, $loadVariables)
-		{
+        $null = null;
+        return $null;
+    }
 
-			$database = Database::getDatabaseInstance();
+    protected final static function removeObject(&$objectList, $id) {
+        foreach ($objectList as $item) {
+            if ($item->getId() == $id) {
+                unset($objectList[$item->getId()]);
+            }
+        }
+    }
 
-			if ($database == null)
-				throw new DatabaseException("Database connection failed. Impossible to send a SQL Query without a connection!");
+    protected static function load(&$objectList, $table, $id, $loadVariables) {
 
-			$object = self::getObject($objectList, $id);
+        $database = Database::getDatabaseInstance();
 
-			if ($object == null)
-			{
-				$sql_search = "SELECT * FROM `".$table."` WHERE `id`=".$id." LIMIT 1;";
-				$query = $database->getPDOInstance()->query($sql_search);
+        if ($database == null) {
+            throw new DatabaseException("Database connection failed. Impossible to send a SQL Query without a connection!");
+        }
 
-				if ($query->rowCount() < 1)
-					throw new CachedTableException("ID not found on table '".$table."'!");
+        $object = self::getObject($objectList, $id);
 
-				$object = $loadVariables($query->fetch());
-				$object->isLoaded = true;
+        if ($object == null) {
+            $sql_search = "SELECT * FROM `" . $table . "` WHERE `id`=" . $id . " LIMIT 1;";
+            $query = $database->getPDOInstance()->query($sql_search);
 
-				self::addObject($objectList, $object);
-			}
+            if ($query->rowCount() < 1) {
+                throw new CachedTableException("ID not found on table '" . $table . "'!");
+            }
 
-			return $object;
+            $object = $loadVariables($query->fetch());
+            $object->isLoaded = true;
 
-		}
+            self::addObject($objectList, $object);
+        }
 
-		public function getId()
-		{
-			return $this->id;
-		}
+        return $object;
+    }
 
-		public function isLoaded()
-		{
-			return $this->isLoaded;
-		}
-	}
+    public function getId() {
+        return $this->id;
+    }
+
+    public function isLoaded() {
+        return $this->isLoaded;
+    }
+
+}
+
 ?>
