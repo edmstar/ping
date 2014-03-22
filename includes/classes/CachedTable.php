@@ -1,5 +1,9 @@
 <?php
 
+if (!defined('IN_INDEX')) {
+    exit;
+}
+
 include_once('Database.php');
 
 class CachedTableException extends Exception {

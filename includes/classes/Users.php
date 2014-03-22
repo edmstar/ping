@@ -1,5 +1,9 @@
 <?php
 
+if (!defined('IN_INDEX')) {
+    exit;
+}
+
 include_once('CachedTable.php');
 
 class UsersException extends Exception {
