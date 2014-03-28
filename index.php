@@ -1,12 +1,14 @@
 <?php
+
+    session_start();
     
     define('IN_INDEX', 1);
     //shows erros
     ini_set('display_errors', 'on');
-
+    error_reporting(E_ERROR | E_PARSE);
+    //error_reporting(E_ALL ^ E_NOTICE);
     //includes the basic configuration
     include('includes/config.php');
-    
 
 ?>
 
@@ -70,28 +72,28 @@
               </ul>
             </li>
           </ul>
-	  <!--
+	  
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="../navbar/">Default</a></li>
-            <li><a href="../navbar-static-top/">Static top</a></li>
-            <li class="active"><a href="./">Fixed top</a></li>
+		<?php
+		  if (userLoggedIn()) {
+		      echo '<li><a href="index.php?module=login">'.$userLogin->getName().'</a></li><li><a href="index.php?module=login&action=logout">Logout</a></li>';
+		  } else {
+		      echo '<li><a href="index.php?module=login">Login</a></li>';
+		  }
+		?>
+            <!--<li><a href="../navbar-static-top/">Static top</a></li>
+            <li class="active"><a href="./">Fixed top</a></li>-->
           </ul>
-	  -->
+	  
         </div><!--/.nav-collapse -->
       </div>
     </div>
 
     <div class="container">
 
-      <!-- Main component for a primary marketing message or call to action -->
-      <div class="jumbotron">
-        <h1>Navbar example</h1>
-        <p>This example is a quick exercise to illustrate how the default, static and fixed to top navbar work. It includes the responsive CSS and HTML, so it also adapts to your viewport and device.</p>
-        <p>To see the difference between static and fixed top navbars, just scroll.</p>
-        <p>
-          <a class="btn btn-lg btn-primary" href="../../components/#navbar" role="button">View navbar docs &raquo;</a>
-        </p>
-      </div>
+	<?php
+	    require('includes/modules.php');
+	?>
 
     </div> <!-- /container -->
 

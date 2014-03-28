@@ -151,20 +151,4 @@ class Security {
 
 }
 
-// this should no be here. to be moved
-/* 		function Redirect($url, $tempo)	{
-  $url = str_replace('&amp;', '&', $url);
-
-  if($tempo > 0) {
-  echo "<script>red_timeout = setTimeout('redir(\'$url\')', $tempo);</script>";
-  } else {
-  @ob_flush();
-  @ob_end_clean();
-  echo "<script>window.location='$url';</script>";
-  exit;
-  }
-  }
-
-  }
- */
 ?>
