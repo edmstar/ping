@@ -6,6 +6,7 @@
 
     //includes the basic configuration
     include('includes/config.php');
+    
 
 ?>
 
@@ -19,7 +20,7 @@
     <meta name="author" content="">
     <link rel="shortcut icon" href="ico/favicon.ico">
 
-    <title>Fixed Top Navbar Example for Bootstrap</title>
+    <title>Ping</title>
 
     <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -49,7 +50,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">Project name</a>
+          <a class="navbar-brand" href="index.php">Ping</a>
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
@@ -69,11 +70,13 @@
               </ul>
             </li>
           </ul>
+	  <!--
           <ul class="nav navbar-nav navbar-right">
             <li><a href="../navbar/">Default</a></li>
             <li><a href="../navbar-static-top/">Static top</a></li>
             <li class="active"><a href="./">Fixed top</a></li>
           </ul>
+	  -->
         </div><!--/.nav-collapse -->
       </div>
     </div>
