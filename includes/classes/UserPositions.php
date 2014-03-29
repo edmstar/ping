@@ -107,9 +107,9 @@ class UserPositions extends CachedTable {
 	    $newId = $database->getPDOInstance()->lastInsertId();
 
 	    if ($newId > 0) {
-		UserPositions::load($newId);
-		
 		$this->isLoaded = true;
+		$this->id = $newId;
+		
 		self::addObject(UserPositions::$objectList, $this);
 	    }
 

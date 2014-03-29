@@ -93,9 +93,9 @@ class Groups extends CachedTable {
 	    $newId = $database->getPDOInstance()->lastInsertId();
 
 	    if ($newId > 0) {
-		Groups::load($newId);
-		
 		$this->isLoaded = true;
+		$this->id = $newId;
+		
 		self::addObject(Groups::$objectList, $this);
 	    }
 

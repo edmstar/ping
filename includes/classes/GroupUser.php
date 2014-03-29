@@ -101,9 +101,9 @@ class GroupUser extends CachedTable {
 	    $newId = $database->getPDOInstance()->lastInsertId();
 
 	    if ($newId > 0) {
-		GroupUser::load($newId);
-		
 		$this->isLoaded = true;
+		$this->id = $newId;
+		
 		self::addObject(GroupUser::$objectList, $this);
 	    }
 

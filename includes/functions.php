@@ -1,5 +1,9 @@
 <?php
 
+    if (!defined('IN_INDEX')) {
+	exit;
+    }
+    
     function userLoggedIn()
     {
 	return isset($GLOBALS["user_login"]);
@@ -36,6 +40,36 @@
 	    echo "<script>window.location='$url';</script>";
 	    exit;
 	}
+    }
+    
+    function checkEmailExists($database, $email)
+    {	
+	$sql = "SELECT `id` FROM `users` WHERE `email`='".$email."' LIMIT 1;";
+	
+	if ($database->isConnected())
+	{
+	    $query = $database->getPDOInstance()->query($sql);
+	    if ($query->rowCount() == 1) {
+		return true;
+	    } else {
+		return false;
+	    }
+	} else { 
+	    throw new Exception("Database connection failed.");
+	}
+    }
+    
+    function loginUser($id)
+    {
+	$_SESSION['user_id'] = $id;
+	$GLOBALS['user_login'] = Users::load($id);
+	
+	return $GLOBALS['user_login'];
+    }
+    
+    function printError($error)
+    {
+	echo '<p class="bg-danger">'.$error.'</p>';
     }
 
 ?>

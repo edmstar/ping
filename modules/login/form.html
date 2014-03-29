@@ -1,0 +1,40 @@
+<div class="jumbotron">
+    <div class="row">
+	<div class="col-md-4">
+	    <h3>Sign in</h3><br>
+	    <form role="form" method="POST" action="index.php?module=login&action=login">
+	      <div class="form-group">
+		<label for="exampleInputEmail1">Email address</label>
+		<input type="email" class="form-control" id="ping_email" name="ping_email" placeholder="Enter email">
+	      </div>
+	      <div class="form-group">
+		<label for="exampleInputPassword1">Password</label>
+		<input type="password" class="form-control" id="ping_password" name ="ping_password" placeholder="Password">
+	      </div>
+	      <input type="hidden" name="ping_form_submit" value="1"/>
+	      <button type="submit" class="btn btn-primary">Sign in</button>
+	    </form>
+	</div>
+	
+	<div class="col-md-4 col-md-offset-2">
+	    <h3>Create an account</h3><br>
+	    <form role="form" method="POST" action="index.php?module=login&action=create">
+	      <div class="form-group">
+		<label for="exampleInputEmail1">Full Name</label>
+		<input type="text" class="form-control" id="ping_create_name" name="ping_create_name" placeholder="Enter full name" value=""/>
+	      </div>
+	      <div class="form-group">
+		<label for="exampleInputEmail1">Email address</label>
+		<input type="email" class="form-control" id="ping_create_email" name="ping_create_email" placeholder="Enter email" value=""/>
+	      </div>
+	      <div class="form-group">
+		<label for="exampleInputPassword1">Password</label>
+		<input type="password" class="form-control" id="ping_create_password" name ="ping_create_password" placeholder="Password" value="">
+		<input type="password" class="form-control" id="ping_create_password_confirm" name ="ping_create_password_confirm" placeholder="Confirm Password"/>
+	      </div>
+	      <input type="hidden" name="ping_form_create_submit" value="1"/>
+	      <button type="submit" class="btn btn-primary">Create Account</button>
+	    </form>
+	</div>
+    </div>
+</div>
