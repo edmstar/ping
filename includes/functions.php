@@ -46,6 +46,18 @@
     {	
 	$sql = "SELECT `id` FROM `users` WHERE `email`='".$email."' LIMIT 1;";
 	
+	return checkQuery($database, $sql);
+    }
+    
+    function checkGroupExists($database, $name)
+    {
+	$sql = "SELECT `id` FROM `groups` WHERE `name`='".$name."' LIMIT 1;";
+	
+	return checkQuery($database, $sql);
+    }
+    
+    function checkQuery($database, $sql)
+    {
 	if ($database->isConnected())
 	{
 	    $query = $database->getPDOInstance()->query($sql);

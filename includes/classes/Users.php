@@ -77,12 +77,8 @@ class Users extends CachedTable {
     }
 
     public function save() {
-
-	$database = Database::getDatabaseInstance();
 	
-	if ($database == null) {
-	    throw new DatabaseException("Database connection failed. Impossible to send a SQL Query without a connection!");
-	}
+	$database = Database::getDatabaseInstance();
 	
 	if ($this->id != USERS::NEW_USER_ID) {
 
@@ -91,12 +87,12 @@ class Users extends CachedTable {
 	    }
 	    
 	    $sqlUpdate = "UPDATE `users` SET `email` = '".$this->email."', `password` = '".$this->password."', `name` = '".$this->name."' WHERE `id` = ".$this->id." LIMIT 1;";
-	    $query = $database->getPDOInstance()->query($sqlUpdate);
+	    $query = $this->dbQuery($sqlUpdate);
 	   
 	} else {
 
 	    $sqlInsert = "INSERT INTO `users` (`email`, `password`, `name`) VALUES ('" . $this->email . "', '" . $this->password . "', '" . $this->name . "');";
-	    $query = $database->getPDOInstance()->query($sqlInsert);
+	    $query = $this->dbQuery($sqlInsert);
 
 	    $newId = $database->getPDOInstance()->lastInsertId();
 
@@ -161,7 +157,50 @@ class Users extends CachedTable {
     private function checkEmail($email) {
 	return filter_var($email, FILTER_VALIDATE_EMAIL);
     }
-
+    
+    public function getGroups() {
+	
+	// gets the ids from the groups the user belongs to, ordered by the group names
+	$sql = "SELECT g.`id` FROM `group_user` as gu, `groups` as g WHERE gu.`user`='".$this->id."' AND gu.`group`=g.`id` ORDER BY g.`name` ASC;";
+	
+	$query = $this->dbQuery($sql);
+	
+	$list = array();
+	
+	if ($query->rowCount() >= 1) {
+	    $rows = $query->fetchAll();
+	    foreach($rows as $row) {
+		$group = Groups::load($row['id']);
+		if ($group->isLoaded()) {
+		    $list[] = $group;
+		}
+	    }
+	}
+	
+	return $list;
+    }
+    
+    public function getGroupUsers() {
+	
+	// gets the ids from the groups the user belongs to, ordered by the group names
+	$sql = "SELECT gu.`id` FROM `group_user` as gu, `groups` as g WHERE gu.`user`='".$this->id."' AND gu.`group`=g.`id` ORDER BY gu.`owner` DESC, g.`name` ASC;";
+	
+	$query = $this->dbQuery($sql);
+	
+	$list = array();
+	
+	if ($query->rowCount() >= 1) {
+	    $rows = $query->fetchAll();
+	    foreach($rows as $row) {
+		$groupuser = GroupUser::load($row['id']);
+		if ($groupuser->isLoaded()) {
+		    $list[] = $groupuser;
+		}
+	    }
+	}
+	
+	return $list;
+    }
 }
 
 ?>

@@ -24,7 +24,7 @@
 		    throw new Exception("The password doesn't match!");
 		}
 		if (strlen($name) < 3) {
-		    throw new Exception("The name must be at least 6 characteres long!");
+		    throw new Exception("The name must be at least 3 characteres long!");
 		}
 		if (checkEmailExists($database, $email)) {
 		    throw new Exception("The email inserted is already being used! Try again with a different email.");

@@ -83,12 +83,12 @@ class Groups extends CachedTable {
 	    }
 	    
 	    $sqlUpdate = "UPDATE `groups` SET `name` = '".$this->name."' WHERE `id` = ".$this->id." LIMIT 1;";
-	    $query = $database->getPDOInstance()->query($sqlUpdate);
+	    $query = $this->dbQuery($sqlUpdate);
 	   
 	} else {
 
 	    $sqlInsert = "INSERT INTO `groups` (`name`) VALUES ('" . $this->name . "');";
-	    $query = $database->getPDOInstance()->query($sqlInsert);
+	    $query = $this->dbQuery($sqlInsert);
 
 	    $newId = $database->getPDOInstance()->lastInsertId();
 
@@ -104,7 +104,7 @@ class Groups extends CachedTable {
 	    }
 	}
     }
-
+    
     public function getName() {
 	return $this->name;
     }
@@ -115,7 +115,59 @@ class Groups extends CachedTable {
 	}
 	$this->name = $name;
     }
-
+    
+    public function addOwner($user) {
+	
+	if (!($user instanceof Users)) {
+	    throw new GroupsException('The argument must be a member of the "Users" class.');
+	}
+	
+	foreach($user->getGroupUsers() as $groupuser) {
+	    if ($groupuser->getGroup()->getId() == $this->id) {
+		$groupuser->setOwner(true);
+		$groupuser->save();
+		return true;
+	    }
+	}
+	
+	$gu = GroupUser::create($user, $this, true);
+    }
+    
+    public function addUser($user) {
+	
+	if (!($user instanceof Users)) {
+	    throw new GroupsException('The argument must be a member of the "Users" class.');
+	}
+	
+	foreach($user->getGroupUsers() as $groupuser) {
+	    if ($groupuser->getGroup()->getId() == $this->id) {
+		return true;
+	    }
+	}
+	
+	$gu = GroupUser::create($user, $this, false);
+    }
+    
+    public function getUsers() {
+	
+	$sql = "SELECT u.`id` FROM `group_user` as gu, `users` as u WHERE u.`id`=gu.`user` ORDER BY gu.`owner` DESC, u.`name` ASC;";
+	
+	$query = $this->dbQuery($sql);
+	
+	$list = array();
+	
+	if ($query->rowCount() >= 1) {
+	    $rows = $query->fetchAll();
+	    foreach($rows as $row) {
+		$user = Users::load($row['id']);
+		if ($user->isLoaded()) {
+		    $list[] = $user;
+		}
+	    }
+	}
+	
+	return $list;
+    }
 }
 
 ?>

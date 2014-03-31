@@ -109,6 +109,17 @@ abstract class CachedTable extends Database {
     public function isLoaded() {
         return $this->isLoaded;
     }
+    
+    protected function dbQuery($sql) {
+	
+	$database = Database::getDatabaseInstance();
+	
+	if ($database == null) {
+	    throw new DatabaseException("Database connection failed. Impossible to send a SQL Query without a connection!");
+	}
+	
+	return $database->getPDOInstance()->query($sql);
+    }
 
 }
 

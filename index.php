@@ -5,7 +5,7 @@
     define('IN_INDEX', 1);
     //shows erros
     ini_set('display_errors', 'on');
-    error_reporting(E_ERROR | E_PARSE);
+    error_reporting(E_ERROR | E_WARNING | E_PARSE);
     //error_reporting(E_ALL ^ E_NOTICE);
     //includes the basic configuration
     include('includes/config.php');
@@ -56,9 +56,22 @@
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#contact">Contact</a></li>
+            <li class="active"><a href="index.php">Home</a></li>
+	    <?php
+		if (userLoggedIn()) {
+	    ?>
+	    <li class="dropdown">
+		<a href="index.php?module=groups" class="dropdown-toggle" data-toggle="dropdown">Groups <b class="caret"></b></a>
+		<ul class="dropdown-menu">
+		    <li><a href="index.php?module=groups&action=mygroups">My Groups</a></li>
+		    <li class="divider"></li>
+		    <li><a href="index.php?module=groups&action=new">New Group</a></li>
+		</ul>
+	    </li>
+	    <?php
+		}
+	    ?>
+	    <!--
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
               <ul class="dropdown-menu">
@@ -71,6 +84,7 @@
                 <li><a href="#">One more separated link</a></li>
               </ul>
             </li>
+	    -->
           </ul>
 	  
           <ul class="nav navbar-nav navbar-right">
