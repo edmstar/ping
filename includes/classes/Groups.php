@@ -171,21 +171,14 @@ class Groups extends CachedTable {
     
     public function getLastUserPositions() {
 	
-	$user_count = count($this->getUsers());
-	$sql = "SELECT DISTINCT gu.`user`, up.`id` FROM `user_positions` as up, `group_user` as gu "
-		. "WHERE up.`group_user`=gu.`id` AND gu.`group`=".$this->id." ORDER BY up.`time` DESC LIMIT ".$user_count.";";
-	
-	$query = $this->dbQuery($sql);
+	$users = $this->getUsers();
 	
 	$list = array();
 	
-	if ($query->rowCount() >= 1) {
-	    $rows = $query->fetchAll();
-	    foreach($rows as $row) {
-		$userPosition = UserPositions::load($row['id']);
-		if ($userPosition->isLoaded()) {
-		    $list[] = $userPosition;
-		}
+	foreach($users as $user) {
+	    $up = $user->getLastPosition($this);
+	    if ($up != null) {
+		$list[] = $up;
 	    }
 	}
 	

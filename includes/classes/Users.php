@@ -201,6 +201,25 @@ class Users extends CachedTable {
 	
 	return $list;
     }
+    
+    public function getLastPosition($group) {
+	
+	if (!($group instanceof Groups)) {
+	    throw new UsersException("The argument must be an instance of the Groups class!");
+	}
+	
+	$sql = "SELECT up.`id` FROM `user_positions` as up, `group_user` as gu WHERE gu.`user`=".$this->id." AND gu.`group`=".$group->getId().
+		" AND gu.`id`=up.`group_user` ORDER BY up.`time` DESC LIMIT 1;";
+	
+	$query = $this->dbQuery($sql);
+	
+	if ($query->rowCount() == 1) {
+	    $row = $query->fetch();
+	    return UserPositions::load($row['id']);
+	} else {
+	    return null;
+	}
+    }
 }
 
 ?>

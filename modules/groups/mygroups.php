@@ -37,8 +37,7 @@
 	</div>
 	<div class="col-md-6">
 	    <?php loadGoogleMapsAPI(); ?>
-	    
-	    <script type="text/javascript"></script>
+
 	    <h3>Your location</h3><br/>
 	    <div id="map-canvas"></div>
 	</div>
@@ -68,6 +67,7 @@
 		 }).done(function(msg) {
 		     $("#scpt").html(msg);
 		 });
+		 eventObject.preventDefault();
 		 return false;
 	      });
 	  }
@@ -76,13 +76,19 @@
       
     function initialize() {
       var myOptions = {
+	center: new google.maps.LatLng(49.2569777,-123.123904),
 	zoom: 17,
 	mapTypeId: google.maps.MapTypeId.ROADMAP
       };
       var map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
-      
+      var options = {
+	enableHighAccuracy: true,
+	timeout: 5000,
+	maximumAge: 0
+      };
       // Try W3C Geolocation (Preferred)
       if(navigator.geolocation) {
+
 	browserSupportFlag = true;
 	navigator.geolocation.getCurrentPosition(function(position) {
 	  myPosition = position;
@@ -95,14 +101,15 @@
 	    });
 	}, function() {
 	  handleNoGeolocation(browserSupportFlag);
-	});
+	}, options);
       }
       // Browser doesn't support Geolocation
       else {
+
 	browserSupportFlag = false;
 	handleNoGeolocation(browserSupportFlag);
       }
-
+      
       function handleNoGeolocation(errorFlag) {
 	if (errorFlag == true) {
 	  alert("Geolocation service failed.");
