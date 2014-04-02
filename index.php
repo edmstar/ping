@@ -2,14 +2,18 @@
 
     session_start();
     
-    define('IN_INDEX', 1);
-    //shows erros
     ini_set('display_errors', 'on');
     error_reporting(E_ERROR | E_WARNING | E_PARSE);
+    
+    define('IN_INDEX', 1);
+    //shows erros
+
+    date_default_timezone_set("America/Vancouver"); 
+    
     //error_reporting(E_ALL ^ E_NOTICE);
     //includes the basic configuration
     include('includes/config.php');
-
+    include('includes/ajax.php');
 ?>
 
 <!DOCTYPE html>
@@ -38,6 +42,13 @@
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <style>
+    #map-canvas {
+	width: 100%;
+	height: 200px;
+    }
+    </style>
   </head>
 
   <body>
@@ -102,6 +113,13 @@
         </div><!--/.nav-collapse -->
       </div>
     </div>
+    <div class="row">
+	<div class="md-col-12">
+	    <div id="message" class="container">
+		
+	    </div>
+	</div>
+    </div>
 
     <div class="container">
 
@@ -110,12 +128,14 @@
 	?>
 
     </div> <!-- /container -->
+    <div id="scpt">
+	
+    </div>
 
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
   </body>
 </html>

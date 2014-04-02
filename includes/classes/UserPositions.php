@@ -35,9 +35,9 @@ class UserPositions extends CachedTable {
 	$this->id = $id;
     }
 
-    private function __destruct() {
+    public function __destruct() {
 	if ($this->isLoaded()) {
-	    parent::removeObject($this->id);
+	    parent::removeObject(UserPositions::$objectList, $this->id);
 	}
     }
 
@@ -96,12 +96,12 @@ class UserPositions extends CachedTable {
 		throw new UserPositionsException("UserPositions is not loaded!");
 	    }
 	    
-	    $sqlUpdate = "UPDATE `user_positions` SET (`group_user` = '".$this->groupUser."', `time` = '".$this->time."', `hidden` = ".$this->hidden.", `latitude` = ".$this->latitude.", `longitude` = ".$this->longitude.") WHERE `id` = ".$this->id." LIMIT 1;";
+	    $sqlUpdate = "UPDATE `user_positions` SET `group_user` = '".$this->groupUser."', `time` = '".$this->time."', `hidden` = ".$this->hidden.", `latitude` = '".$this->latitude."', `longitude` = '".$this->longitude."' WHERE `id` = ".$this->id." LIMIT 1;";
 	    $query = $database->getPDOInstance()->query($sqlUpdate);
 	   
 	} else {
 
-	    $sqlInsert = "INSERT INTO `user_positions` (`group_user`, `time`, `hidden`, `latitude`, `longitude`) VALUES ('".$this->groupUser."', '".$this->time."', ".$this->hidden.", ".$this->latitude.", ".$this->longitude.");";
+	    $sqlInsert = "INSERT INTO `user_positions` (`group_user`, `time`, `hidden`, `latitude`, `longitude`) VALUES ('".$this->groupUser."', '".$this->time."', ".$this->hidden.", '".$this->latitude."', '".$this->longitude."');";
 	    $query = $database->getPDOInstance()->query($sqlInsert);
 
 	    $newId = $database->getPDOInstance()->lastInsertId();

@@ -16,6 +16,9 @@
 
     include_once('functions.php');
     
+    define('MINIMUM_UPDATE_TIME', 120);
+    define('MAXIMUM_TIME_WITHOUT_UPDATE', 3600);
+    
     $security = new Security();
     
     $database = Database::getDatabase('localhost', 'ping', 'ping', 'ping');
@@ -23,6 +26,7 @@
     
     //checks if the user is logged in and, if so, loads the user in the global variable $userLogin
     $GLOBALS["user_login"] = null;
+    $GLOBALS["google_api_key"] = "AIzaSyCtPoH4iWn0X9FGLUFRtdWRxxDjkUU5DvM";
     
     if (isset($_SESSION['user_id']))
     {

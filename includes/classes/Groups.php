@@ -29,9 +29,9 @@ class Groups extends CachedTable {
 	$this->id = $id;
     }
 
-    private function __destruct() {
+    public function __destruct() {
 	if ($this->isLoaded()) {
-	    parent::removeObject($this->id);
+	    parent::removeObject(Groups::$objectList, $this->id);
 	}
     }
 
@@ -150,7 +150,7 @@ class Groups extends CachedTable {
     
     public function getUsers() {
 	
-	$sql = "SELECT u.`id` FROM `group_user` as gu, `users` as u WHERE u.`id`=gu.`user` ORDER BY gu.`owner` DESC, u.`name` ASC;";
+	$sql = "SELECT u.`id` FROM `group_user` as gu, `users` as u WHERE u.`id`=gu.`user` AND gu.`group`=".$this->id." ORDER BY gu.`owner` DESC, u.`name` ASC;";
 	
 	$query = $this->dbQuery($sql);
 	
@@ -162,6 +162,29 @@ class Groups extends CachedTable {
 		$user = Users::load($row['id']);
 		if ($user->isLoaded()) {
 		    $list[] = $user;
+		}
+	    }
+	}
+	
+	return $list;
+    }
+    
+    public function getLastUserPositions() {
+	
+	$user_count = count($this->getUsers());
+	$sql = "SELECT DISTINCT gu.`user`, up.`id` FROM `user_positions` as up, `group_user` as gu "
+		. "WHERE up.`group_user`=gu.`id` AND gu.`group`=".$this->id." ORDER BY up.`time` DESC LIMIT ".$user_count.";";
+	
+	$query = $this->dbQuery($sql);
+	
+	$list = array();
+	
+	if ($query->rowCount() >= 1) {
+	    $rows = $query->fetchAll();
+	    foreach($rows as $row) {
+		$userPosition = UserPositions::load($row['id']);
+		if ($userPosition->isLoaded()) {
+		    $list[] = $userPosition;
 		}
 	    }
 	}

@@ -9,20 +9,20 @@
     
     if ($submit) {
 	try {
-	    $name = $security->varPost('ping_group_name');
+	    $email = $security->varPost('ping_group_name');
 	    
 	    try {
-		if ($name == '') {
+		if ($email == '') {
 		    throw new Exception('The field must not be empty!');
 		}
-		if (strlen($name) < 3) {
+		if (strlen($email) < 3) {
 		    throw new Exception("The name must be at least 6 characteres long!");
 		}
-		if (checkGroupExists($database, $name)) {
+		if (checkGroupExists($database, $email)) {
 		    throw new Exception("This name is already being used by another group. Please choose another name.");
 		}
 		
-		$group = Groups::create($name);
+		$group = Groups::create($email);
 		
 		if ($group->isLoaded())
 		{

@@ -10,20 +10,20 @@
 
 	try {
 
-	    $name = $security->varPost('ping_create_name');
+	    $email = $security->varPost('ping_create_name');
 	    $email = $security->varPost('ping_create_email');
 	    $password = $security->varPost('ping_create_password');
 	    $confirm_password = $security->varPost('ping_create_password_confirm');
 
 	    try {
 		
-		if ($name == '' || $email == '' || $password == '' || $confirm_password == '') {
+		if ($email == '' || $email == '' || $password == '' || $confirm_password == '') {
 		    throw new Exception("The fields must not be empty!");
 		}
 		if ($password != $confirm_password) {
 		    throw new Exception("The password doesn't match!");
 		}
-		if (strlen($name) < 3) {
+		if (strlen($email) < 3) {
 		    throw new Exception("The name must be at least 3 characteres long!");
 		}
 		if (checkEmailExists($database, $email)) {
@@ -33,7 +33,7 @@
 		    throw new Exception("The password must be at least 6 characteres long!");
 		}
 
-		$user = Users::create($email, $password, $name);
+		$user = Users::create($email, $password, $email);
 		
 		if ($user->isLoaded())
 		{

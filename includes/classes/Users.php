@@ -32,9 +32,9 @@ class Users extends CachedTable {
 	$this->id = $id;
     }
 
-    private function __destruct() {
+    public function __destruct() {
 	if ($this->isLoaded()) {
-	    parent::removeObject($this->id);
+	    parent::removeObject(Users::$objectList, $this->id);
 	}
     }
 

@@ -12,11 +12,7 @@
 	    require('modules/login/index.php');
 	    break;
 	case 'groups':
-	    if (userLoggedIn()) {
-		require('modules/groups/index.php');
-	    } else {
-		redirect('index.php?module=login');
-	    }
+	    require('modules/groups/index.php');
 	    break;
 	case 'main':
 	default:

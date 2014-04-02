@@ -33,9 +33,9 @@ class GroupUser extends CachedTable {
 	$this->id = $id;
     }
 
-    private function __destruct() {
+    public function __destruct() {
 	if ($this->isLoaded()) {
-	    parent::removeObject($this->id);
+	    parent::removeObject(GroupUser::$objectList, $this->id);
 	}
     }
 
@@ -90,12 +90,12 @@ class GroupUser extends CachedTable {
 		throw new GroupUserException("GroupUser is not loaded!");
 	    }
 	    
-	    $sqlUpdate = "UPDATE `group_user` SET (`user` = '".$this->user."', `group` = '".$this->group."', `owner` = ".$this->owner.") WHERE `id` = ".$this->id." LIMIT 1;";
+	    $sqlUpdate = "UPDATE `group_user` SET `user` = '".$this->user."', `group` = '".$this->group."', `owner` = '".$this->owner."' WHERE `id` = ".$this->id." LIMIT 1;";
 	    $query = $database->getPDOInstance()->query($sqlUpdate);
 	   
 	} else {
 
-	    $sqlInsert = "INSERT INTO `group_user` (`user`, `group`, `owner`) VALUES ('".$this->user."', '".$this->group."', ".$this->owner.");";
+	    $sqlInsert = "INSERT INTO `group_user` (`user`, `group`, `owner`) VALUES ('".$this->user."', '".$this->group."', '".$this->owner."');";
 	    $query = $database->getPDOInstance()->query($sqlInsert);
 
 	    $newId = $database->getPDOInstance()->lastInsertId();
