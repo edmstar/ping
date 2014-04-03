@@ -19,7 +19,7 @@
 		    $userId = checkLogin($database, $email, $password);
 		    $userLogin = loginUser($userId);
 
-		    redirect('index.php?module=login');
+		    redirect('index.php');
 
 		} catch (Exception $ex) {
 		    printError($ex->getMessage());
