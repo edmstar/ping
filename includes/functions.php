@@ -29,7 +29,7 @@
 		
     }
     
-    function redirect($url, $time = 0) {
+    function redirect($url, $time = 1) {
 	$url = str_replace('&amp;', '&', $url);
 	echo "<script>$(document).ready(function(){
 		setTimeout(function() {
